@@ -24,7 +24,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-100`}
     >
-      <body className="min-vh-100 d-flex flex-column">{children}</body>
+      <body className="min-vh-100 d-flex flex-column">
+        <div className="container-fluid flex-fill d-flex flex-column p-0">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
