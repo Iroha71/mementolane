@@ -8,7 +8,7 @@ export const tasks = sqliteTable("tasks", {
   dueAt: text("due_at"),
   status: text("status", { length: 10 }).notNull().default(task.plan),
   detail: text("detail", { length: 200 }),
-  isDone: integer("is_done", { mode: "boolean" }).default(false),
+  isDone: integer("is_done", { mode: "boolean" }).notNull().default(false),
 });
 
 export type Task = typeof tasks.$inferSelect;

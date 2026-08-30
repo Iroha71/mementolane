@@ -5,5 +5,5 @@ CREATE TABLE `tasks` (
 	`due_at` text,
 	`status` text(10) DEFAULT '予定' NOT NULL,
 	`detail` text(200),
-	`is_done` integer DEFAULT false
+	`is_done` integer DEFAULT false NOT NULL
 );

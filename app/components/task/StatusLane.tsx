@@ -28,7 +28,7 @@ export default function StatusLane(props: StatusLaneProps) {
               startAt={task.startAt ?? undefined}
               dueAt={task.dueAt ?? undefined}
               detail={task.detail ?? undefined}
-              isDone={task.isDone ?? false}
+              isDone={task.isDone}
             />
           ))}
           {props.tasks.length === 0 && (
