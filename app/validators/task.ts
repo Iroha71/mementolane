@@ -1,11 +1,13 @@
-import z from "zod";
+import { z } from "zod";
 import { task } from "../messages";
 
-function startOfToday() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+/** ローカル時刻基準の今日（YYYY-MM-DD） */
+function today() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
 
-  return today;
+  return `${now.getFullYear()}-${month}-${day}`;
 }
 
 export const taskSchema = z.object({
@@ -13,19 +15,13 @@ export const taskSchema = z.object({
     .string()
     .min(5, `${task.name}は5文字以上で入力してください`)
     .max(30, `${task.name}は30文字以内で入力してください`),
-  startAt: z
+  startAt: z.iso
     .date()
-    .refine(
-      (value) => value >= startOfToday(),
-      `${task.startAt}は今日以降を指定してください`,
-    )
+    .refine((v) => v >= today(), `${task.startAt}は今日以降を指定してください`)
     .optional(),
-  dueAt: z
+  dueAt: z.iso
     .date()
-    .refine(
-      (value) => value >= startOfToday(),
-      `${task.dueAt}は今日以降を指定してください`,
-    )
+    .refine((v) => v >= today(), `${task.dueAt}は今日以降を指定してください`)
     .optional(),
   status: z.enum([
     task.plan,
