@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <div className="flex-fill overflow-hidden px-4 pt-3 pb-4">
-      <div className="row row-cols-5 g-3 h-100">
+      <div className="row flex-nowrap g-3 h-100 overflow-auto">
         <StatusLane
           status={task.plan}
           borderClassName="border-secondary-subtle"

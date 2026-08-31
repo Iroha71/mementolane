@@ -10,7 +10,7 @@ interface StatusLaneProps {
 
 export default function StatusLane(props: StatusLaneProps) {
   return (
-    <div className="col h-100">
+    <div className="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2 h-100">
       <div
         className={`h-100 d-flex flex-column overflow-hidden rounded bg-body-tertiary border-top border-4 ${props.borderClassName}`}
       >
