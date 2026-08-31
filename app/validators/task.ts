@@ -23,13 +23,9 @@ export const taskSchema = z.object({
     .date()
     .refine((v) => v >= today(), `${task.dueAt}は今日以降を指定してください`)
     .optional(),
-  status: z.enum([
-    task.plan,
-    task.thisweek,
-    task.wip,
-    task.inreview,
-    task.inspection,
-  ]),
+  status: z
+    .enum([task.plan, task.thisweek, task.wip, task.inreview, task.inspection])
+    .default(task.plan),
   detail: z
     .string()
     .min(5, `${task.detail}は5文字以上で入力してください`)
