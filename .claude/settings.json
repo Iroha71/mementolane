@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.ts|*.tsx) { npx eslint \"$f\" && npx tsc --noEmit; } >&2 || exit 2 ;; esac",
+            "timeout": 90,
+            "statusMessage": "型チェック・リントを実行中..."
+          }
+        ]
+      }
+    ]
+  }
+}
