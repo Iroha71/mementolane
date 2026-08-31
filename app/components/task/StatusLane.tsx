@@ -35,6 +35,9 @@ export default function StatusLane(props: StatusLaneProps) {
             <p className="small text-body-secondary mb-0">タスクなし</p>
           )}
         </div>
+        <div className="p-2 w-100">
+          <button className="btn btn-secondary w-100">＋ 追加する</button>
+        </div>
       </div>
     </div>
   );
