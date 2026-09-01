@@ -1,5 +1,7 @@
 import type { Task } from "@/app/db/schema";
 import TaskCard from "./TaskCard";
+import Link from "next/link";
+import path from "path";
 
 interface StatusLaneProps {
   status: string;
@@ -37,6 +39,7 @@ export default function StatusLane(props: StatusLaneProps) {
         </div>
         <div className="p-2 w-100">
           <button className="btn btn-secondary w-100">＋ 追加する</button>
+          <Link className="btn btn-secondary w-100" href={{pathname: '/task/regist/'}}>追加する</Link>
         </div>
       </div>
     </div>
