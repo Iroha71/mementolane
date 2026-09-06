@@ -1,9 +1,12 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const memos = sqliteTable("memos", {
+export const card = sqliteTable("cards", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
+  title: text("title", { length: 30 }).notNull(),
+  status: text("status", { length: 20 }).notNull().default("plan"),
+  startAt: text("start_at"),
+  dueAt: text("due_at"),
+  detail: text("detail", { length: 200 }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),

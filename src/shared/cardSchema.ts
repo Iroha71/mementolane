@@ -1,0 +1,24 @@
+import { iso, string, z } from "zod";
+import { message } from "./message";
+
+const cardLabel = message.card;
+
+const cardSchema = z.object({
+  title: string()
+    .min(1, { error: `${cardLabel.title}は必須です` })
+    .max(30, { error: `${cardLabel.title}は30字以内で入力してください` }),
+  status: string()
+    .min(1, { error: `${cardLabel.status}は必須です` })
+    .max(20, { error: `${cardLabel.status}は20字以内で入力してください` }),
+  startAt: iso.date({
+    error: `${cardLabel.startAt}はyyyy-mm-dd形式で入力してください`,
+  }),
+  dueAt: iso.date({
+    error: `${cardLabel.dueAt}はyyyy-mm-dd形式で入力してください`,
+  }),
+  detail: string().max(200, {
+    error: `${cardLabel.detail}は200字以内で入力してください`,
+  }),
+});
+
+export type CardSchama = z.infer<typeof cardSchema>;
