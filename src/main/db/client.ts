@@ -20,7 +20,7 @@ export const getDb = () => {
   dbInstance = drizzle(sqlite, { schema });
 
   migrate(dbInstance, {
-    migrationsFolder: path.join(__dirname, "..", "..", "drizzle"),
+    migrationsFolder: path.join(__dirname, "..", "..", "..", "drizzle"),
   });
 
   return dbInstance;
