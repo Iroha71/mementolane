@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { message } from "../../shared/message";
 import StatusLane from "@/components/StatusLane";
 import {
@@ -8,6 +7,7 @@ import {
   Package,
   PencilLine,
 } from "lucide-react";
+import { useEffect } from "react";
 
 const STATUSES = [
   {
@@ -38,16 +38,15 @@ const STATUSES = [
 ];
 
 export default function Home() {
-  const handleSendMessage = () => {
-    window.api.sendMessage("hello");
-  };
+  useEffect(() => {
+    window.api.getActiveTasks().then((cards) => {
+      console.log(cards);
+    });
+  }, []);
 
   return (
-    <div className="flex w-full flex-col gap-4 p-4">
-      <div>
-        <Button onClick={handleSendMessage}>送信</Button>
-      </div>
-      <div className="flex w-full items-start gap-4">
+    <div className="flex w-full flex-col p-4">
+      <div className="flex w-full items-start gap-2">
         {STATUSES.map((status) => (
           <div key={status.value.value} className="min-w-0 flex-1">
             <StatusLane

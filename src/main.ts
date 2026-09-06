@@ -1,7 +1,10 @@
 import { BrowserWindow, app, ipcMain } from "electron";
 import path from "node:path";
 import { getDb } from "./main/db/client";
-import { sendMessage } from "./main/repositories/cardRepository";
+import {
+  getActiveTasks,
+  sendMessage,
+} from "./main/repositories/cardRepository";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -40,3 +43,4 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.handle("sendMessage", (_event, msg: string) => sendMessage(msg));
+ipcMain.handle("getActiveTasks", () => getActiveTasks());
