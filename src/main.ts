@@ -4,7 +4,7 @@ import { getDb } from "./db/client";
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 180,
+    width: 1080,
     height: 720,
   });
 
