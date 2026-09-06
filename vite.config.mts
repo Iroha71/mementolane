@@ -15,6 +15,10 @@ export default defineConfig({
       "@": path.resolve(dirname, "src/renderer"),
     },
   },
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     outDir: "../../dist/renderer",
     emptyOutDir: true,
