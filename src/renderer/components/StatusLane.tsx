@@ -20,14 +20,19 @@ interface StatusLaneProps {
   };
   variant: string;
   icon: React.JSX.Element;
-  cards: CardSchama[]
+  cards: CardSchama[];
 }
 
-function getCardsByStatus (status: string, cards: CardSchama[]): CardSchama[] {
+function getCardsByStatus(status: string, cards: CardSchama[]): CardSchama[] {
   return cards.filter((card) => card.status === status);
 }
 
-export default function StatusLane({ status, variant, icon, cards }: StatusLaneProps) {
+export default function StatusLane({
+  status,
+  variant,
+  icon,
+  cards,
+}: StatusLaneProps) {
   return (
     <Card className="py-2">
       <CardHeader className="px-2">
@@ -35,7 +40,7 @@ export default function StatusLane({ status, variant, icon, cards }: StatusLaneP
           <span
             className={cn(
               "inline-flex items-center gap-2 rounded-md px-2 py-1",
-              variant
+              variant,
             )}
           >
             {icon}
@@ -43,14 +48,23 @@ export default function StatusLane({ status, variant, icon, cards }: StatusLaneP
           </span>
         </CardTitle>
         <CardAction>
-          <Badge className={variant}>1</Badge>
+          <Badge className={variant}>
+            {getCardsByStatus(status.value, cards).length}
+          </Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="px-2">
-        {getCardsByStatus(status.value, cards).length > 0 
-          ? getCardsByStatus(status.value, cards).map((card) => (
-          <TaskCard title={card.title} startAt={card.startAt} dueAt={card.dueAt} detail={card.detail} isDone={card.isDone} />
-        )) : (
+        {getCardsByStatus(status.value, cards).length > 0 ? (
+          getCardsByStatus(status.value, cards).map((card) => (
+            <TaskCard
+              title={card.title}
+              startAt={card.startAt}
+              dueAt={card.dueAt}
+              detail={card.detail}
+              isDone={card.isDone}
+            />
+          ))
+        ) : (
           <div className="w-[18rem]">
             <p>タスクがありません</p>
           </div>
