@@ -10,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { CardSchama } from "../../shared/cardSchema";
+import TaskCard from "./TaskCard";
 
 interface StatusLaneProps {
   status: {
@@ -18,9 +20,10 @@ interface StatusLaneProps {
   };
   variant: string;
   icon: React.JSX.Element;
+  cards: CardSchama[]
 }
 
-export default function StatusLane({ status, variant, icon }: StatusLaneProps) {
+export default function StatusLane({ status, variant, icon, cards }: StatusLaneProps) {
   return (
     <Card>
       <CardHeader>
@@ -39,7 +42,11 @@ export default function StatusLane({ status, variant, icon }: StatusLaneProps) {
           <Badge className={variant}>1</Badge>
         </CardAction>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent>
+        {cards.filter((card) => card.status === status.value).map((card) => (
+          <TaskCard title={card.title} startAt={card.startAt} dueAt={card.dueAt} detail={card.detail} isDone={card.isDone} />
+        ))}
+      </CardContent>
       <CardFooter>
         <Button>＋タスクを追加する</Button>
       </CardFooter>

@@ -7,7 +7,8 @@ import {
   Package,
   PencilLine,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { CardSchama } from "../../shared/cardSchema";
 
 const STATUSES = [
   {
@@ -40,9 +41,10 @@ const STATUSES = [
 export default function Home() {
   useEffect(() => {
     window.api.getActiveTasks().then((cards) => {
-      console.log(cards);
+      setCards(cards);
     });
   }, []);
+  const [cards, setCards] = useState<CardSchama[]>([])
 
   return (
     <div className="flex w-full flex-col p-4">
@@ -50,6 +52,7 @@ export default function Home() {
         {STATUSES.map((status) => (
           <div key={status.value.value} className="min-w-0 flex-1">
             <StatusLane
+              cards={cards}
               status={status.value}
               variant={status.variant}
               icon={status.icon}
