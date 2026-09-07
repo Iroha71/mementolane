@@ -39,12 +39,13 @@ const STATUSES = [
 ];
 
 export default function Home() {
+  const [cards, setCards] = useState<CardSchama[]>([]);
+
   useEffect(() => {
     window.api.getActiveTasks().then((cards) => {
       setCards(cards);
     });
   }, []);
-  const [cards, setCards] = useState<CardSchama[]>([])
 
   return (
     <div className="flex w-full flex-col p-4">
