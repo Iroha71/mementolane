@@ -1,9 +1,10 @@
-import { boolean, iso, string, z } from "zod";
+import { boolean, iso, number, string, z } from "zod";
 import { message } from "./message";
 
 const cardLabel = message.card;
 
 const cardSchema = z.object({
+  id: number(),
   title: string()
     .min(1, { error: `${cardLabel.title}は必須です` })
     .max(30, { error: `${cardLabel.title}は30字以内で入力してください` }),
