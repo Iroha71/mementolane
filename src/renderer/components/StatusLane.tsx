@@ -25,8 +25,8 @@ interface StatusLaneProps {
 
 export default function StatusLane({ status, variant, icon, cards }: StatusLaneProps) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="py-2">
+      <CardHeader className="px-2">
         <CardTitle>
           <span
             className={cn(
@@ -42,12 +42,12 @@ export default function StatusLane({ status, variant, icon, cards }: StatusLaneP
           <Badge className={variant}>1</Badge>
         </CardAction>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2">
         {cards.filter((card) => card.status === status.value).map((card) => (
           <TaskCard title={card.title} startAt={card.startAt} dueAt={card.dueAt} detail={card.detail} isDone={card.isDone} />
         ))}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="px-2">
         <Button>＋タスクを追加する</Button>
       </CardFooter>
     </Card>

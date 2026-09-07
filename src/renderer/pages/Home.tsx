@@ -48,9 +48,9 @@ export default function Home() {
 
   return (
     <div className="flex w-full flex-col p-4">
-      <div className="flex w-full items-start gap-2">
+      <div className="flex w-full items-start gap-2 overflow-x-auto">
         {STATUSES.map((status) => (
-          <div key={status.value.value} className="min-w-0 flex-1">
+          <div key={status.value.value} className="flex-none">
             <StatusLane
               cards={cards}
               status={status.value}
