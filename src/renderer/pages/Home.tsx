@@ -8,7 +8,7 @@ import {
   PencilLine,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CardSchama } from "../../shared/cardSchema";
+import { CardSchema } from "../../shared/cardSchema";
 
 const STATUSES = [
   {
@@ -39,7 +39,7 @@ const STATUSES = [
 ];
 
 export default function Home() {
-  const [cards, setCards] = useState<CardSchama[]>([]);
+  const [cards, setCards] = useState<CardSchema[]>([]);
 
   useEffect(() => {
     window.api.getActiveTasks().then((cards) => {

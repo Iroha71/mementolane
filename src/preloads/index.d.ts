@@ -1,10 +1,10 @@
-import { CardSchama } from "../shared/cardSchema";
+import { CardSchema } from "../shared/cardSchema";
 
 declare global {
   interface Window {
     api: {
       sendMessage: (msg: string) => Promise<void>;
-      getActiveTasks: () => Promise<CardSchama[]>;
+      getActiveTasks: () => Promise<CardSchema[]>;
     };
   }
 }

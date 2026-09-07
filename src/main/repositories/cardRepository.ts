@@ -1,9 +1,9 @@
 import { ne } from "drizzle-orm";
 import { getDb } from "../db/client";
 import { card } from "../db/schema";
-import { CardSchama } from "../../shared/cardSchema";
+import { CardSchema } from "../../shared/cardSchema";
 
-export async function getActiveTasks(): Promise<CardSchama[]> {
+export async function getActiveTasks(): Promise<CardSchema[]> {
   try {
     const db = getDb();
 

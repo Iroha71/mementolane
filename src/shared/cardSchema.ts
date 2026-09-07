@@ -31,4 +31,4 @@ const cardSchema = z.object({
   isDone: boolean().default(false),
 });
 
-export type CardSchama = z.infer<typeof cardSchema>;
+export type CardSchema = z.infer<typeof cardSchema>;

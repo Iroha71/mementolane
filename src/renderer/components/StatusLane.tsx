@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { CardSchama } from "../../shared/cardSchema";
+import { CardSchema } from "../../shared/cardSchema";
 import TaskCard from "./TaskCard";
 
 interface StatusLaneProps {
@@ -20,10 +20,10 @@ interface StatusLaneProps {
   };
   variant: string;
   icon: React.JSX.Element;
-  cards: CardSchama[];
+  cards: CardSchema[];
 }
 
-function getCardsByStatus(status: string, cards: CardSchama[]): CardSchama[] {
+function getCardsByStatus(status: string, cards: CardSchema[]): CardSchema[] {
   return cards.filter((card) => card.status === status);
 }
 
