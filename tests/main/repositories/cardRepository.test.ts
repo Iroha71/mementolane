@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockWhere = vi.fn();
-const mockFrom = vi.fn(() => ({ where: mockWhere }));
-const mockSelect = vi.fn(() => ({ from: mockFrom }));
+const { mockWhere, mockFrom, mockSelect } = vi.hoisted(() => {
+  const mockWhere = vi.fn();
+  const mockFrom = vi.fn(() => ({ where: mockWhere }));
+  const mockSelect = vi.fn(() => ({ from: mockFrom }));
+  return { mockWhere, mockFrom, mockSelect };
+});
 
 vi.mock("../../../src/main/db/client", () => ({
   getDb: vi.fn(() => ({ select: mockSelect })),
