@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import { cn } from "cn";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -72,7 +73,9 @@ export default function StatusLane({
         )}
       </CardContent>
       <CardFooter className="px-2">
-        <Button>＋タスクを追加する</Button>
+        <Button asChild>
+          <Link to={`/tasks/new/${status.value}`}>＋タスクを追加する</Link>
+        </Button>
       </CardFooter>
     </Card>
   );
