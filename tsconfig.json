@@ -14,5 +14,10 @@
       "@/*": ["./src/renderer/*"]
     }
   },
-  "include": ["src/main.ts", "src/db/**/*.ts"]
+  "include": [
+    "src/main.ts",
+    "src/main/db/**/*.ts",
+    "src/main/repositories/**/*.ts",
+    "src/preloads/**/*.ts"
+  ]
 }

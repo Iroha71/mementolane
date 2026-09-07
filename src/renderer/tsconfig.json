@@ -11,12 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/renderer/*"]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "src/renderer/**/*.ts",
-    "src/renderer/**/*.tsx",
-    "src/preloads/index.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "../preloads/index.d.ts"]
 }
