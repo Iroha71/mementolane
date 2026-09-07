@@ -23,6 +23,10 @@ interface StatusLaneProps {
   cards: CardSchama[]
 }
 
+function getCardsByStatus (status: string, cards: CardSchama[]): CardSchama[] {
+  return cards.filter((card) => card.status === status);
+}
+
 export default function StatusLane({ status, variant, icon, cards }: StatusLaneProps) {
   return (
     <Card className="py-2">
@@ -43,9 +47,14 @@ export default function StatusLane({ status, variant, icon, cards }: StatusLaneP
         </CardAction>
       </CardHeader>
       <CardContent className="px-2">
-        {cards.filter((card) => card.status === status.value).map((card) => (
+        {getCardsByStatus(status.value, cards).length > 0 
+          ? getCardsByStatus(status.value, cards).map((card) => (
           <TaskCard title={card.title} startAt={card.startAt} dueAt={card.dueAt} detail={card.detail} isDone={card.isDone} />
-        ))}
+        )) : (
+          <div className="w-[18rem]">
+            <p>タスクがありません</p>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="px-2">
         <Button>＋タスクを追加する</Button>
