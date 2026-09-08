@@ -3,8 +3,10 @@ import path from "node:path";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
+  insertTasks,
   sendMessage,
 } from "./main/repositories/cardRepository";
+import { CardRequestSchema, cardRequestSchema } from "./shared/cardSchema";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -44,3 +46,4 @@ app.on("window-all-closed", () => {
 
 ipcMain.handle("sendMessage", (_event, msg: string) => sendMessage(msg));
 ipcMain.handle("getActiveTasks", () => getActiveTasks());
+ipcMain.handle("insertTask", (_event, request: CardRequestSchema) => insertTasks(request))

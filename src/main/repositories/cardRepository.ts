@@ -1,7 +1,7 @@
 import { ne } from "drizzle-orm";
 import { getDb } from "../db/client";
 import { card } from "../db/schema";
-import { CardSchema } from "../../shared/cardSchema";
+import { CardRequestSchema, CardSchema } from "../../shared/cardSchema";
 
 export async function getActiveTasks(): Promise<CardSchema[]> {
   try {
@@ -17,4 +17,24 @@ export async function getActiveTasks(): Promise<CardSchema[]> {
 
 export function sendMessage(msg: string) {
   console.log(msg);
+}
+
+export async function insertTasks(request: CardRequestSchema): Promise<CardSchema | null>{
+  try {
+    const db = getDb();
+
+    const [result] = await db.insert(card).values({
+      title: request.title,
+      status: request.status,
+      startAt: request.startAt,
+      dueAt: request.dueAt,
+      detail: request.detail,
+    }).returning();
+
+    return result;
+  } catch (err) {
+    console.error(err);
+
+    return null;
+  }
 }
