@@ -30,6 +30,7 @@ interface TaskFormProps {
   dueAt?: string;
   detail?: string;
   status: string;
+  onSubmit: SubmitHandler<CardRequestSchema>;
 }
 
 export default function TaskForm({
@@ -37,6 +38,7 @@ export default function TaskForm({
   startAt,
   dueAt,
   status,
+  onSubmit,
 }: TaskFormProps) {
   const {
     register,
@@ -57,9 +59,6 @@ export default function TaskForm({
       isDone: false,
     },
   });
-
-  const onSubmit: SubmitHandler<CardRequestSchema> = (data) =>
-    console.log(data);
 
   return (
     <Card className="w-120">
