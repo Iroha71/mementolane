@@ -73,7 +73,7 @@ export default function StatusLane({
         )}
       </CardContent>
       <CardFooter className="px-2">
-        <Button asChild>
+        <Button asChild variant="outline" className="w-full">
           <Link to={`/tasks/new/${status.value}`}>＋タスクを追加する</Link>
         </Button>
       </CardFooter>

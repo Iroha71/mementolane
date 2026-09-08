@@ -14,6 +14,15 @@ import { Input } from "./ui/input";
 import { InputGroup } from "./ui/input-group";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+
+const STATUS_OPTIONS = Object.values(message.card.statuses);
 
 interface TaskFormProps {
   title?: string;
@@ -32,6 +41,9 @@ export default function TaskForm({
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
+    control,
     formState: { errors, isLoading, isValid },
   } = useForm<CardRequestSchema>({
     resolver: zodResolver(cardRequestSchema),
@@ -50,7 +62,7 @@ export default function TaskForm({
     console.log(data);
 
   return (
-    <Card className="w-[30rem]">
+    <Card className="w-120">
       <CardHeader>
         <CardTitle>タスクの作成</CardTitle>
         <CardDescription>
@@ -71,14 +83,47 @@ export default function TaskForm({
             </Field>
             <Field>
               <FieldLabel>{message.card.status}</FieldLabel>
-              <Input {...register("status")} />
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.status && (
+                <FieldDescription className="text-red-500">
+                  {errors.status.message}
+                </FieldDescription>
+              )}
             </Field>
             <Field>
               <FieldLabel>
                 {message.card.startAt} / {message.card.dueAt}
               </FieldLabel>
               <InputGroup>
-                <Input type="date" {...register("startAt")} />
+                <Input
+                  type="date"
+                  {...register("startAt", {
+                    onChange: (e) => {
+                      if (!getValues("dueAt")) {
+                        setValue("dueAt", e.target.value, {
+                          shouldValidate: true,
+                        });
+                      }
+                    },
+                  })}
+                />
                 <Input type="date" {...register("dueAt")} />
               </InputGroup>
               {errors.startAt && (
@@ -101,11 +146,12 @@ export default function TaskForm({
                 </FieldDescription>
               )}
             </Field>
+            <Field>
+              <Button type="submit" disabled={!isValid}>
+              登録する
+            </Button>
+            </Field>
           </FieldGroup>
-
-          <Button type="submit" disabled={!isValid}>
-            {isValid ? <p>true</p> : <p>false</p>}
-          </Button>
         </form>
       </CardContent>
     </Card>
