@@ -19,22 +19,25 @@ export function sendMessage(msg: string) {
   console.log(msg);
 }
 
-export async function insertTasks(request: CardRequestSchema): Promise<CardSchema | null>{
+export async function insertTasks(
+  request: CardRequestSchema,
+): Promise<CardSchema | null> {
   try {
     const db = getDb();
 
-    const [result] = await db.insert(card).values({
-      title: request.title,
-      status: request.status,
-      startAt: request.startAt,
-      dueAt: request.dueAt,
-      detail: request.detail,
-    }).returning();
+    const [result] = await db
+      .insert(card)
+      .values({
+        title: request.title,
+        status: request.status,
+        startAt: request.startAt,
+        dueAt: request.dueAt,
+        detail: request.detail,
+      })
+      .returning();
 
     return result;
   } catch (err) {
-    console.error(err);
-
-    return null;
+    throw new Error("タスクの登録に失敗しました。もう一度やり直してください。");
   }
 }

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { SubmitHandler } from "react-hook-form";
 import TaskForm from "../../components/TaskForm";
 import { CardRequestSchema } from "../../../shared/cardSchema";
+import { useEffect, useState } from "react";
 
 interface TaskCreateProps {
   status: string;
@@ -9,12 +10,13 @@ interface TaskCreateProps {
 
 export default function TaskCreate({ status }: TaskCreateProps) {
   const navigate = useNavigate();
+  const [saveError, setSaveError] = useState<string>("");
 
   const onSubmit: SubmitHandler<CardRequestSchema> = async (data) => {
-    const result = await window.api.addTask(data);
-
-    if (result === null) {
-      return;
+    try {
+      await window.api.addTask(data);
+    } catch (err) {
+      if (err instanceof Error) setSaveError(err.message);
     }
 
     navigate("/");

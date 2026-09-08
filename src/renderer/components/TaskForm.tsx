@@ -30,6 +30,7 @@ interface TaskFormProps {
   dueAt?: string;
   detail?: string;
   status: string;
+  error?: string;
   onSubmit: SubmitHandler<CardRequestSchema>;
 }
 
@@ -38,6 +39,7 @@ export default function TaskForm({
   startAt,
   dueAt,
   status,
+  error,
   onSubmit,
 }: TaskFormProps) {
   const {
@@ -146,9 +148,10 @@ export default function TaskForm({
               )}
             </Field>
             <Field>
+              {error && <p className="text-red-500">{error}</p>}
               <Button type="submit" disabled={!isValid}>
-              登録する
-            </Button>
+                登録する
+              </Button>
             </Field>
           </FieldGroup>
         </form>
