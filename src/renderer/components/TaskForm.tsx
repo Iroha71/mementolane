@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { z } from "zod";
 import {
   cardRequestSchema,
   CardRequestFieldErrors,
@@ -57,7 +58,11 @@ export default function TaskForm({
     setError,
     control,
     formState: { errors, isLoading, isValid },
-  } = useForm<CardRequestSchema>({
+  } = useForm<
+    z.input<typeof cardRequestSchema>,
+    unknown,
+    CardRequestSchema
+  >({
     resolver: zodResolver(cardRequestSchema),
     mode: "onChange",
     reValidateMode: "onChange",
