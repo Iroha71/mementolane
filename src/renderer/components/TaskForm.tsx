@@ -1,5 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cardRequestSchema, CardRequestSchema } from "../../shared/cardSchema";
+import { useEffect } from "react";
+import {
+  cardRequestSchema,
+  CardRequestFieldErrors,
+  CardRequestSchema,
+} from "../../shared/cardSchema";
 import {
   Card,
   CardContent,
@@ -31,6 +36,7 @@ interface TaskFormProps {
   detail?: string;
   status: string;
   error?: string;
+  fieldErrors?: CardRequestFieldErrors;
   onSubmit: SubmitHandler<CardRequestSchema>;
 }
 
@@ -40,6 +46,7 @@ export default function TaskForm({
   dueAt,
   status,
   error,
+  fieldErrors,
   onSubmit,
 }: TaskFormProps) {
   const {
@@ -47,6 +54,7 @@ export default function TaskForm({
     handleSubmit,
     getValues,
     setValue,
+    setError,
     control,
     formState: { errors, isLoading, isValid },
   } = useForm<CardRequestSchema>({
@@ -61,6 +69,16 @@ export default function TaskForm({
       isDone: false,
     },
   });
+
+  useEffect(() => {
+    if (!fieldErrors) return;
+
+    (
+      Object.entries(fieldErrors) as [keyof CardRequestSchema, string][]
+    ).forEach(([field, message]) => {
+      setError(field, { type: "server", message });
+    });
+  }, [fieldErrors, setError]);
 
   return (
     <Card className="w-120">

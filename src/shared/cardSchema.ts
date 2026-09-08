@@ -63,3 +63,15 @@ export const cardRequestSchema = z.object({
 });
 
 export type CardRequestSchema = z.infer<typeof cardRequestSchema>;
+
+export type CardRequestFieldErrors = Partial<
+  Record<keyof CardRequestSchema, string>
+>;
+
+export type InsertTaskResult =
+  | { success: true; data: CardSchema }
+  | {
+      success: false;
+      fieldErrors?: CardRequestFieldErrors;
+      message?: string;
+    };
