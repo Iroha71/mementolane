@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn } from "./utils";
+import { cn } from "../../../src/renderer/lib/utils";
 
 describe("cn", () => {
   it("複数のクラス名を空白区切りで結合する", () => {

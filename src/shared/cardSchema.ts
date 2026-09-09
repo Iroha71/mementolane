@@ -1,4 +1,4 @@
-import { boolean, iso, number, string, z } from "zod";
+import { boolean, date, iso, number, string, z } from "zod";
 import { message } from "./message";
 
 const cardLabel = message.card;
@@ -31,11 +31,15 @@ const cardSchema = z.object({
     .nullable()
     .optional(),
   isDone: boolean().default(false),
+  createdAt: date(),
 });
 
 export type CardSchema = z.infer<typeof cardSchema>;
 
-export const cardRequestSchema = cardSchema.omit({ id: true });
+export const cardRequestSchema = cardSchema.omit({
+  id: true,
+  createdAt: true,
+});
 
 export type CardRequestSchema = z.infer<typeof cardRequestSchema>;
 
