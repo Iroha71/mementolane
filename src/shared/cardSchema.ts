@@ -1,7 +1,18 @@
-import { boolean, iso, number, string, z } from "zod";
+import { boolean, date, iso, number, string, z } from "zod";
 import { message } from "./message";
 
 const cardLabel = message.card;
+
+const dateField = (label: string) =>
+  z.preprocess(
+    (val) => (val === "" ? null : val),
+    iso
+      .date({
+        error: `${label}はyyyy-mm-dd形式で入力してください`,
+      })
+      .nullable()
+      .optional(),
+  );
 
 const cardSchema = z.object({
   id: number(),
@@ -11,18 +22,8 @@ const cardSchema = z.object({
   status: string()
     .min(1, { error: `${cardLabel.status}は必須です` })
     .max(20, { error: `${cardLabel.status}は20字以内で入力してください` }),
-  startAt: iso
-    .date({
-      error: `${cardLabel.startAt}はyyyy-mm-dd形式で入力してください`,
-    })
-    .nullable()
-    .optional(),
-  dueAt: iso
-    .date({
-      error: `${cardLabel.dueAt}はyyyy-mm-dd形式で入力してください`,
-    })
-    .nullable()
-    .optional(),
+  startAt: dateField(cardLabel.startAt),
+  dueAt: dateField(cardLabel.dueAt),
   detail: string()
     .max(200, {
       error: `${cardLabel.detail}は200字以内で入力してください`,
@@ -30,6 +31,26 @@ const cardSchema = z.object({
     .nullable()
     .optional(),
   isDone: boolean().default(false),
+  createdAt: date(),
 });
 
 export type CardSchema = z.infer<typeof cardSchema>;
+
+export const cardRequestSchema = cardSchema.omit({
+  id: true,
+  createdAt: true,
+});
+
+export type CardRequestSchema = z.infer<typeof cardRequestSchema>;
+
+export type CardRequestFieldErrors = Partial<
+  Record<keyof CardRequestSchema, string>
+>;
+
+export type InsertTaskResult =
+  | { success: true; data: CardSchema }
+  | {
+      success: false;
+      fieldErrors?: CardRequestFieldErrors;
+      message?: string;
+    };
