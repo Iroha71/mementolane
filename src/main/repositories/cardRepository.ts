@@ -19,7 +19,7 @@ export function sendMessage(msg: string) {
   console.log(msg);
 }
 
-export async function insertTasks(
+export async function insertTask(
   request: CardRequestSchema,
 ): Promise<CardSchema | null> {
   try {
@@ -36,8 +36,12 @@ export async function insertTasks(
       })
       .returning();
 
-    return result;
+    return result ?? null;
   } catch (err) {
-    throw new Error("タスクの登録に失敗しました。もう一度やり直してください。");
+    console.error(err);
+
+    throw new Error("タスクの登録に失敗しました。もう一度やり直してください。", {
+      cause: err,
+    });
   }
 }

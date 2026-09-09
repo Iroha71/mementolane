@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
-  insertTasks,
+  insertTask,
   sendMessage,
 } from "./main/repositories/cardRepository";
 import { cardRequestSchema, InsertTaskResult } from "./shared/cardSchema";
@@ -64,7 +64,7 @@ ipcMain.handle(
     }
 
     try {
-      const data = await insertTasks(parsed.data);
+      const data = await insertTask(parsed.data);
 
       if (!data) {
         return {
