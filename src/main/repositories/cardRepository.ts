@@ -33,6 +33,7 @@ export async function insertTask(
         startAt: request.startAt,
         dueAt: request.dueAt,
         detail: request.detail,
+        isDone: request.isDone,
       })
       .returning();
 
