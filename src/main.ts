@@ -1,4 +1,9 @@
-import { BrowserWindow, app, ipcMain } from "electron";
+import {
+  BrowserWindow,
+  app,
+  ipcMain,
+  IpcMainInvokeEvent,
+} from "electron";
 import path from "node:path";
 import { unknown, z } from "zod";
 import { getDb } from "./main/db/client";
@@ -105,58 +110,57 @@ ipcMain.handle(
     }
   },
 );
-ipcMain.handle(
-  "updateTask",
-  async (
-    _event,
-    id: unknown,
-    request: unknown,
-  ): Promise<InsertTaskResult> => {
-    const parsedId = z.number().int().safeParse(id);
+export const handleUpdateTask = async (
+  _event: IpcMainInvokeEvent,
+  id: unknown,
+  request: unknown,
+): Promise<InsertTaskResult> => {
+  const parsedId = z.number().int().safeParse(id);
 
-    if (!parsedId.success) {
+  if (!parsedId.success) {
+    return {
+      success: false,
+      message: "不正なIDです。",
+      staus: 400,
+    };
+  }
+
+  const parsed = cardRequestSchema.safeParse(request);
+  if (!parsed.success) {
+    const { fieldErrors: rawFieldErrors } = z.flattenError(parsed.error);
+    const fieldErrors = Object.fromEntries(
+      Object.entries(rawFieldErrors)
+        .filter(([, messages]) => messages && messages.length > 0)
+        .map(([field, messages]) => [field, messages![0]]),
+    );
+
+    return { success: false, fieldErrors, staus: 422 };
+  }
+
+  try {
+    const data = await updateTask(parsedId.data, parsed.data);
+
+    if (!data) {
       return {
         success: false,
-        message: "不正なIDです。",
-        staus: 400,
+        message: "タスクの更新に失敗しました。もう一度やり直してください。",
+        staus: 200,
       };
     }
 
-    const parsed = cardRequestSchema.safeParse(request);
-    if (!parsed.success) {
-      const { fieldErrors: rawFieldErrors } = z.flattenError(parsed.error);
-      const fieldErrors = Object.fromEntries(
-        Object.entries(rawFieldErrors)
-          .filter(([, messages]) => messages && messages.length > 0)
-          .map(([field, messages]) => [field, messages![0]]),
-      );
+    return { success: true, data, status: 500 };
+  } catch (err) {
+    console.error(err);
 
-      return { success: false, fieldErrors, staus: 422 };
-    }
+    return {
+      success: false,
+      message:
+        err instanceof Error
+          ? err.message
+          : "エラーが発生しました。もう一度やり直してください",
+      staus: 500,
+    };
+  }
+};
 
-    try {
-      const data = await updateTask(parsedId.data, parsed.data);
-
-      if (!data) {
-        return {
-          success: false,
-          message: "タスクの更新に失敗しました。もう一度やり直してください。",
-          staus: 200,
-        };
-      }
-
-      return { success: true, data, status: 500 };
-    } catch (err) {
-      console.error(err);
-
-      return {
-        success: false,
-        message:
-          err instanceof Error
-            ? err.message
-            : "エラーが発生しました。もう一度やり直してください",
-        staus: 500,
-      };
-    }
-  },
-);
+ipcMain.handle("updateTask", handleUpdateTask);
