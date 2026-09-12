@@ -48,9 +48,10 @@ export type CardRequestFieldErrors = Partial<
 >;
 
 export type InsertTaskResult =
-  | { success: true; data: CardSchema }
+  | { success: true; data: CardSchema; status: number }
   | {
       success: false;
       fieldErrors?: CardRequestFieldErrors;
       message?: string;
+      staus: number;
     };

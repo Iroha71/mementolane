@@ -9,7 +9,12 @@ declare global {
     api: {
       sendMessage: (msg: string) => Promise<void>;
       getActiveTasks: () => Promise<CardSchema[]>;
+      getTask: (id: number) => Promise<CardSchema | null>;
       addTask: (request: CardRequestSchema) => Promise<InsertTaskResult>;
+      updateTask: (
+        id: number,
+        request: CardRequestSchema,
+      ) => Promise<InsertTaskResult>;
     };
   }
 }
