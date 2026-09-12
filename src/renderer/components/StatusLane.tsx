@@ -59,6 +59,7 @@ export default function StatusLane({
           getCardsByStatus(status.value, cards).map((card) => (
             <TaskCard
               key={card.id}
+              id={card.id}
               title={card.title}
               startAt={card.startAt}
               dueAt={card.dueAt}

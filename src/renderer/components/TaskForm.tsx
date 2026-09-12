@@ -31,10 +31,12 @@ import {
 const STATUS_OPTIONS = Object.values(message.card.statuses);
 
 interface TaskFormProps {
+  mode?: "create" | "update";
   title?: string;
   startAt?: string;
   dueAt?: string;
   detail?: string;
+  isDone?: boolean;
   status: string;
   error?: string;
   fieldErrors?: CardRequestFieldErrors;
@@ -42,9 +44,12 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({
+  mode = "create",
   title,
   startAt,
   dueAt,
+  detail,
+  isDone,
   status,
   error,
   fieldErrors,
@@ -70,8 +75,9 @@ export default function TaskForm({
       title: title ? title : "",
       startAt: startAt ? startAt : null,
       dueAt: dueAt ? dueAt : null,
+      detail: detail ? detail : "",
       status: status,
-      isDone: false,
+      isDone: isDone ?? false,
     },
   });
 
@@ -88,9 +94,13 @@ export default function TaskForm({
   return (
     <Card className="w-120">
       <CardHeader>
-        <CardTitle>タスクの作成</CardTitle>
+        <CardTitle>
+          {mode === "update" ? "タスクの編集" : "タスクの作成"}
+        </CardTitle>
         <CardDescription>
-          作成するタスクの情報を入力してください
+          {mode === "update"
+            ? "タスクの情報を編集してください"
+            : "作成するタスクの情報を入力してください"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -173,7 +183,7 @@ export default function TaskForm({
             <Field>
               {error && <p className="text-red-500">{error}</p>}
               <Button type="submit" disabled={!isValid}>
-                登録する
+                {mode === "update" ? "更新する" : "登録する"}
               </Button>
             </Field>
           </FieldGroup>
