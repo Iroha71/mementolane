@@ -5,7 +5,7 @@ import {
   IpcMainInvokeEvent,
 } from "electron";
 import path from "node:path";
-import { unknown, z } from "zod";
+import { z } from "zod";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
