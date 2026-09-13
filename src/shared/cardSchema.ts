@@ -53,5 +53,5 @@ export type InsertTaskResult =
       success: false;
       fieldErrors?: CardRequestFieldErrors;
       message?: string;
-      staus: number;
+      status: number;
     };

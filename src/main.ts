@@ -83,7 +83,7 @@ ipcMain.handle(
           .map(([field, messages]) => [field, messages![0]]),
       );
 
-      return { success: false, fieldErrors, staus: 422 };
+      return { success: false, fieldErrors, status: 422 };
     }
 
     try {
@@ -93,11 +93,11 @@ ipcMain.handle(
         return {
           success: false,
           message: "タスクの登録に失敗しました。もう一度やり直してください。",
-          staus: 200,
+          status: 404,
         };
       }
 
-      return { success: true, data, status: 500 };
+      return { success: true, data, status: 200 };
     } catch (err) {
       return {
         success: false,
@@ -105,7 +105,7 @@ ipcMain.handle(
           err instanceof Error
             ? err.message
             : "タスクの登録に失敗しました。もう一度やり直してください。",
-        staus: 500,
+        status: 500,
       };
     }
   },
@@ -121,7 +121,7 @@ export const handleUpdateTask = async (
     return {
       success: false,
       message: "不正なIDです。",
-      staus: 400,
+      status: 400,
     };
   }
 
@@ -134,7 +134,7 @@ export const handleUpdateTask = async (
         .map(([field, messages]) => [field, messages![0]]),
     );
 
-    return { success: false, fieldErrors, staus: 422 };
+    return { success: false, fieldErrors, status: 422 };
   }
 
   try {
@@ -144,11 +144,11 @@ export const handleUpdateTask = async (
       return {
         success: false,
         message: "タスクの更新に失敗しました。もう一度やり直してください。",
-        staus: 200,
+        status: 404,
       };
     }
 
-    return { success: true, data, status: 500 };
+    return { success: true, data, status: 200 };
   } catch (err) {
     console.error(err);
 
@@ -158,7 +158,7 @@ export const handleUpdateTask = async (
         err instanceof Error
           ? err.message
           : "エラーが発生しました。もう一度やり直してください",
-      staus: 500,
+      status: 500,
     };
   }
 };

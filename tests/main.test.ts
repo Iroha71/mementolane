@@ -75,7 +75,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         message: "不正なIDです。",
-        staus: 400,
+        status: 400,
       });
       expect(mockedUpdateTask).not.toHaveBeenCalled();
     });
@@ -99,7 +99,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         fieldErrors: { title: "タスク名は必須です" },
-        staus: 422,
+        status: 422,
       });
       expect(mockedUpdateTask).not.toHaveBeenCalled();
     });
@@ -113,7 +113,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         fieldErrors: { title: "タスク名は30字以内で入力してください" },
-        staus: 422,
+        status: 422,
       });
     });
 
@@ -126,7 +126,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         fieldErrors: { status: "現在の状態は必須です" },
-        staus: 422,
+        status: 422,
       });
     });
 
@@ -141,7 +141,7 @@ describe("handleUpdateTask", () => {
         fieldErrors: {
           startAt: "開始日はyyyy-mm-dd形式で入力してください",
         },
-        staus: 422,
+        status: 422,
       });
     });
 
@@ -158,7 +158,7 @@ describe("handleUpdateTask", () => {
           title: "タスク名は必須です",
           status: "現在の状態は必須です",
         },
-        staus: 422,
+        status: 422,
       });
     });
   });
@@ -169,7 +169,7 @@ describe("handleUpdateTask", () => {
 
       const result = await handleUpdateTask(fakeEvent, 1, validRequest);
 
-      expect(result).toEqual({ success: true, data: fakeCard, status: 500 });
+      expect(result).toEqual({ success: true, data: fakeCard, status: 200 });
     });
 
     it("該当レコードがない場合はsuccess: falseを返す", async () => {
@@ -180,7 +180,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         message: "タスクの更新に失敗しました。もう一度やり直してください。",
-        staus: 200,
+        status: 404,
       });
     });
 
@@ -192,7 +192,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         message: "DBエラー",
-        staus: 500,
+        status: 500,
       });
     });
 
@@ -204,7 +204,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         message: "エラーが発生しました。もう一度やり直してください",
-        staus: 500,
+        status: 500,
       });
     });
   });
