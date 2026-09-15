@@ -76,12 +76,7 @@ ipcMain.handle(
     const parsed = cardRequestSchema.safeParse(request);
 
     if (!parsed.success) {
-      const { fieldErrors: rawFieldErrors } = z.flattenError(parsed.error);
-      const fieldErrors = Object.fromEntries(
-        Object.entries(rawFieldErrors)
-          .filter(([, messages]) => messages && messages.length > 0)
-          .map(([field, messages]) => [field, messages![0]]),
-      );
+      const { fieldErrors } = z.flattenError(parsed.error);
 
       return { success: false, fieldErrors, status: 422 };
     }
@@ -127,12 +122,7 @@ export const handleUpdateTask = async (
 
   const parsed = cardRequestSchema.safeParse(request);
   if (!parsed.success) {
-    const { fieldErrors: rawFieldErrors } = z.flattenError(parsed.error);
-    const fieldErrors = Object.fromEntries(
-      Object.entries(rawFieldErrors)
-        .filter(([, messages]) => messages && messages.length > 0)
-        .map(([field, messages]) => [field, messages![0]]),
-    );
+    const { fieldErrors } = z.flattenError(parsed.error);
 
     return { success: false, fieldErrors, status: 422 };
   }
