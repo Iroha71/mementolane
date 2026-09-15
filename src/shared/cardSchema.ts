@@ -44,7 +44,7 @@ export const cardRequestSchema = cardSchema.omit({
 export type CardRequestSchema = z.infer<typeof cardRequestSchema>;
 
 export type CardRequestFieldErrors = Partial<
-  Record<keyof CardRequestSchema, string>
+  Record<keyof CardRequestSchema, string[]>
 >;
 
 export type InsertTaskResult =
