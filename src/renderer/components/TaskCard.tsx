@@ -1,7 +1,8 @@
 import { Calendar, Hourglass, Pencil, Ticket } from "lucide-react"
-import { Link } from "react-router"
 import { Button } from "./ui/button"
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Dialog, DialogTrigger } from "./ui/dialog"
+import TaskUpdateModal from "./TaskUpdateModal"
 
 interface TaskCardProps {
   id: number
@@ -23,11 +24,14 @@ export default function TaskCard ({id, title, startAt, dueAt, detail, isDone}: T
           </p>
         </CardTitle>
         <CardAction>
-          <Button asChild variant="ghost" size="icon-sm">
-            <Link to={`/tasks/${id}/edit`}>
-              <Pencil />
-            </Link>
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon-sm">
+                <Pencil />
+              </Button>
+            </DialogTrigger>
+            <TaskUpdateModal taskId={id} />
+          </Dialog>
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 flex flex-col gap-4">
