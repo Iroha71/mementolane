@@ -24,11 +24,12 @@ export default function TaskUpdateModal ({ taskId }: TaskUpdateModalProps) {
   }
 
   return (
-    <DialogContent>
+    <DialogContent className="sm:max-w-145">
       <DialogHeader>
         <DialogTitle>タスクの更新</DialogTitle>
         {serverError && <p>{serverError}</p>}
         <TaskForm
+          className="w-full"
           mode="update"
           title={task?.title} 
           dueAt={task?.dueAt ?? ""} 

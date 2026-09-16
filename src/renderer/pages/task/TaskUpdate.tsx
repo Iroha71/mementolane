@@ -68,6 +68,7 @@ export default function TaskUpdate({ id }: TaskUpdateProps) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
       <TaskForm
+        className="w-full max-w-150"
         mode="update"
         title={task.title}
         startAt={task.startAt ?? undefined}

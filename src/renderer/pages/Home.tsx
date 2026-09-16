@@ -9,8 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CardSchema } from "../../shared/cardSchema";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import TaskUpdateModal from "@/components/TaskUpdateModal";
+import StatusRadioGroup from "@/components/StatusRadioGroup";
 
 const STATUSES = [
   {
@@ -63,10 +62,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
-        <TaskUpdateModal taskId={1} />
-      </Dialog>
     </div>
   );
 }

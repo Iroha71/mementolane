@@ -26,11 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import StatusRadioGroup from "./StatusRadioGroup";
 
 const STATUS_OPTIONS = Object.values(message.card.statuses);
 
 interface TaskFormProps {
   mode?: "create" | "update";
+  className?: string;
   title?: string;
   startAt?: string;
   dueAt?: string;
@@ -44,6 +46,7 @@ interface TaskFormProps {
 
 export default function TaskForm({
   mode = "create",
+  className,
   title,
   startAt,
   dueAt,
@@ -87,7 +90,7 @@ export default function TaskForm({
   };
 
   return (
-    <Card className="w-120">
+    <Card className={className}>
       <CardHeader>
         <CardTitle>
           {mode === "update" ? "タスクの編集" : "タスクの作成"}
@@ -108,24 +111,7 @@ export default function TaskForm({
             </Field>
             <Field>
               <FieldLabel>{message.card.status}</FieldLabel>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUS_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
+              <StatusRadioGroup />
               <FieldError errors={fieldErrorsFor("status")} />
             </Field>
             <Field>

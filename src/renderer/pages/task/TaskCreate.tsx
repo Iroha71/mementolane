@@ -37,6 +37,7 @@ export default function TaskCreate({ status }: TaskCreateProps) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
       <TaskForm
+        className="w-full max-w-150"
         status={status}
         error={saveError}
         fieldErrors={fieldErrors}
