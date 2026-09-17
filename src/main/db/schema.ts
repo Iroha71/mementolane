@@ -12,3 +12,10 @@ export const card = sqliteTable("cards", {
     .notNull()
     .$defaultFn(() => new Date()),
 });
+
+export const effortBlock = sqliteTable("effort_blocks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  date: integer("id", { mode: "timestamp" }).notNull(),
+  cardId: integer("card_id").references(() => card.id),
+  blockNumber: integer("block_number").notNull(),
+});
