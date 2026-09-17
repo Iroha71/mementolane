@@ -16,6 +16,8 @@ export const card = sqliteTable("cards", {
 export const effortBlock = sqliteTable("effort_blocks", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   date: integer("id", { mode: "timestamp" }).notNull(),
-  cardId: integer("card_id").references(() => card.id),
+  cardId: integer("card_id")
+    .references(() => card.id)
+    .notNull(),
   blockNumber: integer("block_number").notNull(),
 });
