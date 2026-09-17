@@ -10,3 +10,9 @@ const effortBlock = z.object({
 });
 
 export type EffortBlock = z.infer<typeof effortBlock>;
+
+export const effortBlockRequest = effortBlock.omit({
+  id: true,
+});
+
+export type EffortBlockRequest = z.input<typeof effortBlockRequest>;

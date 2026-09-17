@@ -3,6 +3,7 @@ import {
   CardSchema,
   InsertTaskResult,
 } from "../shared/cardSchema";
+import { EffortBlock, EffortBlockRequest } from "../shared/effortBlockSchema";
 
 declare global {
   interface Window {
@@ -15,6 +16,7 @@ declare global {
         id: number,
         request: CardRequestSchema,
       ) => Promise<InsertTaskResult>;
+      registEffort: (request: EffortBlockRequest) => Promise<EffortBlock>;
     };
   }
 }
