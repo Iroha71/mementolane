@@ -64,11 +64,7 @@ export default function TaskForm({
     setValue,
     control,
     formState: { errors, isLoading, isValid },
-  } = useForm<
-    z.input<typeof cardRequestSchema>,
-    unknown,
-    CardRequestSchema
-  >({
+  } = useForm<z.input<typeof cardRequestSchema>, unknown, CardRequestSchema>({
     resolver: zodResolver(cardRequestSchema),
     mode: "onChange",
     reValidateMode: "onChange",
@@ -111,7 +107,16 @@ export default function TaskForm({
             </Field>
             <Field>
               <FieldLabel>{message.card.status}</FieldLabel>
-              <StatusRadioGroup />
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <StatusRadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  />
+                )}
+              />
               <FieldError errors={fieldErrorsFor("status")} />
             </Field>
             <Field>

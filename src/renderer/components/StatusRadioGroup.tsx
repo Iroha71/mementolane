@@ -5,17 +5,24 @@ import {
   Package,
   Pencil,
 } from "lucide-react";
-import { Field, FieldContent, FieldLabel, FieldTitle } from "./ui/field";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
-export default function StatusRadioGroup() {
+interface StatusRadioGroupProps {
+  value?: string;
+  onValueChange?: (value: string) => void;
+}
+
+export default function StatusRadioGroup({
+  value,
+  onValueChange,
+}: StatusRadioGroupProps) {
   return (
     <ToggleGroup
       type="single"
       variant="outline"
-      defaultValue="plan"
       className="w-full"
+      value={value}
+      onValueChange={onValueChange}
     >
       <ToggleGroupItem
         value="plan"
