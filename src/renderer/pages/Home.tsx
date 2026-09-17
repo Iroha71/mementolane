@@ -41,10 +41,14 @@ const STATUSES = [
 export default function Home() {
   const [cards, setCards] = useState<CardSchema[]>([]);
 
-  useEffect(() => {
+  const fetchCards = () => {
     window.api.getActiveTasks().then((cards) => {
       setCards(cards);
     });
+  };
+
+  useEffect(() => {
+    fetchCards();
   }, []);
 
   return (
@@ -57,6 +61,7 @@ export default function Home() {
               status={status.value}
               variant={status.variant}
               icon={status.icon}
+              onTaskUpdated={fetchCards}
             />
           </div>
         ))}

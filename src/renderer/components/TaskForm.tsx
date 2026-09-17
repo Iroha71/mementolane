@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { z } from "zod";
 import {
   cardRequestSchema,
@@ -13,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { message } from "../../shared/message";
 import { Input } from "./ui/input";
@@ -27,11 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import StatusRadioGroup from "./StatusRadioGroup";
 
 const STATUS_OPTIONS = Object.values(message.card.statuses);
 
 interface TaskFormProps {
   mode?: "create" | "update";
+  className?: string;
   title?: string;
   startAt?: string;
   dueAt?: string;
@@ -45,6 +46,7 @@ interface TaskFormProps {
 
 export default function TaskForm({
   mode = "create",
+  className,
   title,
   startAt,
   dueAt,
@@ -60,14 +62,9 @@ export default function TaskForm({
     handleSubmit,
     getValues,
     setValue,
-    setError,
     control,
     formState: { errors, isLoading, isValid },
-  } = useForm<
-    z.input<typeof cardRequestSchema>,
-    unknown,
-    CardRequestSchema
-  >({
+  } = useForm<z.input<typeof cardRequestSchema>, unknown, CardRequestSchema>({
     resolver: zodResolver(cardRequestSchema),
     mode: "onChange",
     reValidateMode: "onChange",
@@ -81,18 +78,15 @@ export default function TaskForm({
     },
   });
 
-  useEffect(() => {
-    if (!fieldErrors) return;
+  const fieldErrorsFor = (field: keyof CardRequestSchema) => {
+    const serverMessages = fieldErrors?.[field] ?? [];
+    const serverErrors = serverMessages.map((message) => ({ message }));
 
-    (
-      Object.entries(fieldErrors) as [keyof CardRequestSchema, string][]
-    ).forEach(([field, message]) => {
-      setError(field, { type: "server", message });
-    });
-  }, [fieldErrors, setError]);
+    return [errors[field], ...serverErrors];
+  };
 
   return (
-    <Card className="w-120">
+    <Card className={className}>
       <CardHeader>
         <CardTitle>
           {mode === "update" ? "タスクの編集" : "タスクの作成"}
@@ -109,37 +103,21 @@ export default function TaskForm({
             <Field>
               <FieldLabel>{message.card.title}</FieldLabel>
               <Input maxLength={30} {...register("title")} />
-              {errors.title && (
-                <FieldDescription className="text-red-500">
-                  {errors.title.message}
-                </FieldDescription>
-              )}
+              <FieldError errors={fieldErrorsFor("title")} />
             </Field>
             <Field>
               <FieldLabel>{message.card.status}</FieldLabel>
               <Controller
-                name="status"
                 control={control}
+                name="status"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUS_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <StatusRadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  />
                 )}
               />
-              {errors.status && (
-                <FieldDescription className="text-red-500">
-                  {errors.status.message}
-                </FieldDescription>
-              )}
+              <FieldError errors={fieldErrorsFor("status")} />
             </Field>
             <Field>
               <FieldLabel>
@@ -160,25 +138,13 @@ export default function TaskForm({
                 />
                 <Input type="date" {...register("dueAt")} />
               </InputGroup>
-              {errors.startAt && (
-                <FieldDescription className="text-red-500">
-                  {errors.startAt.message}
-                </FieldDescription>
-              )}
-              {errors.dueAt && (
-                <FieldDescription className="text-red-500">
-                  {errors.dueAt.message}
-                </FieldDescription>
-              )}
+              <FieldError errors={fieldErrorsFor("startAt")} />
+              <FieldError errors={fieldErrorsFor("dueAt")} />
             </Field>
             <Field>
               <FieldLabel>{message.card.detail}</FieldLabel>
               <Textarea maxLength={200} {...register("detail")} />
-              {errors.detail && (
-                <FieldDescription className="text-red-500">
-                  {errors.detail.message}
-                </FieldDescription>
-              )}
+              <FieldError errors={fieldErrorsFor("detail")} />
             </Field>
             <Field>
               {error && <p className="text-red-500">{error}</p>}

@@ -22,6 +22,7 @@ interface StatusLaneProps {
   variant: string;
   icon: React.JSX.Element;
   cards: CardSchema[];
+  onTaskUpdated?: () => void;
 }
 
 function getCardsByStatus(status: string, cards: CardSchema[]): CardSchema[] {
@@ -33,6 +34,7 @@ export default function StatusLane({
   variant,
   icon,
   cards,
+  onTaskUpdated,
 }: StatusLaneProps) {
   return (
     <Card className="py-2">
@@ -65,6 +67,7 @@ export default function StatusLane({
               dueAt={card.dueAt}
               detail={card.detail}
               isDone={card.isDone}
+              onTaskUpdated={onTaskUpdated}
             />
           ))
         ) : (
