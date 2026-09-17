@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CardSchema } from "../../shared/cardSchema";
-import StatusRadioGroup from "@/components/StatusRadioGroup";
 
 const STATUSES = [
   {
