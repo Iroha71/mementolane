@@ -1,11 +1,6 @@
-import {
-  BrowserWindow,
-  app,
-  ipcMain,
-  IpcMainInvokeEvent,
-} from "electron";
+import { BrowserWindow, app, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "node:path";
-import { z } from "zod";
+import { success, z } from "zod";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
@@ -19,6 +14,13 @@ import {
   CardSchema,
   InsertTaskResult,
 } from "./shared/cardSchema";
+import { registEffort } from "./main/repositories/effortBlockRepository";
+import {
+  effortBlockRequest,
+  type EffortBlock,
+  type EffortBlockRequest,
+} from "./shared/effortBlockSchema";
+import { message } from "./shared/message";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -153,3 +155,28 @@ export const handleUpdateTask = async (
 };
 
 ipcMain.handle("updateTask", handleUpdateTask);
+ipcMain.handle("registEffort", async (_event, request) => {
+  console.log(`main.ts request ${request}`);
+  const parsed = effortBlockRequest.safeParse(request);
+  if (!parsed.success) {
+    const { fieldErrors } = z.flattenError(parsed.error);
+
+    return { success: false, fieldErrors, status: 422 };
+  }
+
+  try {
+    const data = await registEffort(
+      parsed.data.date,
+      parsed.data.cardId,
+      parsed.data.blockNumber,
+    );
+    console.log(`main.ts: ${data}`);
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        "データ登録時にエラーが発生しました。もう一度やり直してください。",
+      status: 500,
+    };
+  }
+});
