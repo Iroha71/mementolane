@@ -98,7 +98,7 @@ describe("handleUpdateTask", () => {
 
       expect(result).toEqual({
         success: false,
-        fieldErrors: { title: "タスク名は必須です" },
+        fieldErrors: { title: ["タスク名は必須です"] },
         status: 422,
       });
       expect(mockedUpdateTask).not.toHaveBeenCalled();
@@ -112,7 +112,7 @@ describe("handleUpdateTask", () => {
 
       expect(result).toEqual({
         success: false,
-        fieldErrors: { title: "タスク名は30字以内で入力してください" },
+        fieldErrors: { title: ["タスク名は30字以内で入力してください"] },
         status: 422,
       });
     });
@@ -125,7 +125,7 @@ describe("handleUpdateTask", () => {
 
       expect(result).toEqual({
         success: false,
-        fieldErrors: { status: "現在の状態は必須です" },
+        fieldErrors: { status: ["現在の状態は必須です"] },
         status: 422,
       });
     });
@@ -139,7 +139,7 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         fieldErrors: {
-          startAt: "開始日はyyyy-mm-dd形式で入力してください",
+          startAt: ["開始日はyyyy-mm-dd形式で入力してください"],
         },
         status: 422,
       });
@@ -155,8 +155,8 @@ describe("handleUpdateTask", () => {
       expect(result).toEqual({
         success: false,
         fieldErrors: {
-          title: "タスク名は必須です",
-          status: "現在の状態は必須です",
+          title: ["タスク名は必須です"],
+          status: ["現在の状態は必須です"],
         },
         status: 422,
       });
