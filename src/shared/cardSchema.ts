@@ -24,6 +24,11 @@ const cardSchema = z.object({
     .max(20, { error: `${cardLabel.status}は20字以内で入力してください` }),
   startAt: dateField(cardLabel.startAt),
   dueAt: dateField(cardLabel.dueAt),
+  themeColor: string()
+    .regex(/^#[0-9A-Fa-f]{6}$/, {
+      error: `${cardLabel.themeColor}は#FFFFFF形式で入力してください`,
+    })
+    .default("#FFFFFF"),
   detail: string()
     .max(200, {
       error: `${cardLabel.detail}は200字以内で入力してください`,

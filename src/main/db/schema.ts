@@ -7,6 +7,7 @@ export const card = sqliteTable("cards", {
   startAt: text("start_at"),
   dueAt: text("due_at"),
   detail: text("detail", { length: 200 }),
+  themeColor: text("theme_color").default("#FFFFFF"),
   isDone: integer("is_done", { mode: "boolean" }).default(false).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -15,7 +16,7 @@ export const card = sqliteTable("cards", {
 
 export const effortBlock = sqliteTable("effort_blocks", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  date: integer("targetDate", { mode: "timestamp" }).notNull(),
+  date: integer("target_date", { mode: "timestamp" }).notNull(),
   cardId: integer("card_id")
     .references(() => card.id)
     .notNull(),

@@ -4,6 +4,7 @@ export const message = {
     status: "現在の状態",
     startAt: "開始日",
     dueAt: "期限日",
+    themeColor: "カラー",
     detail: "詳細",
     statuses: {
       plan: {
