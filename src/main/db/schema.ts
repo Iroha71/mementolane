@@ -7,7 +7,7 @@ export const card = sqliteTable("cards", {
   startAt: text("start_at"),
   dueAt: text("due_at"),
   detail: text("detail", { length: 200 }),
-  themeColor: text("theme_color").default("#FFFFFF"),
+  themeColor: text("theme_color").default("#FFFFFF").notNull(),
   isDone: integer("is_done", { mode: "boolean" }).default(false).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
