@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CardSchema } from "../../../shared/cardSchema";
+import TaskList from "@/components/TaskList";
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -33,70 +34,102 @@ const cellKey = (dayIndex: number, slotIndex: number) =>
 
 export default function EffortList() {
   const weekDates = useMemo(() => getThisWeekDates(), []);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  // セルのkey -> 割り当てたタスクのid
+  const [selectedCell, setSelectedCell] = useState<Map<string, number>>(
+    new Map(),
+  );
   const [tasks, setTasks] = useState<CardSchema[]>([]);
+  const [selectedTask, setSelectedTask] = useState<CardSchema | null>(null)
 
   useEffect(() => {
     window.api.getAllTasks().then((result) => {
       if (result.success) {
         setTasks(result.tasks);
       } else {
-        console.log(result.message);
+        alert(result.message);
       }
-    })
-  }, [])
+    });
+  }, []);
+
+  const setInputTaskData = (id: string) => {
+    const parsedId = parseInt(id);
+    const task = tasks.find((task) => task.id === parsedId);
+    if (task === null || task === undefined)
+      setSelectedTask(null);
+    else
+      setSelectedTask(task);
+  }
 
   const toggleCell = (key: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) {
+    // 割り当て済みのセルはタスク未選択でも解除できるようにする
+    if (selectedCell.has(key)) {
+      setSelectedCell((prev) => {
+        const next = new Map(prev);
         next.delete(key);
-      } else {
-        next.add(key);
-      }
-      return next;
-    });
+        return next;
+      });
+      return;
+    }
+
+    if (selectedTask === null) {
+      alert("タスクが選択されていません");
+      return;
+    }
+
+    const taskId = selectedTask.id;
+    setSelectedCell((prev) => new Map(prev).set(key, taskId));
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="border-collapse">
-        <thead>
-          <tr>
-            <th className="sticky left-0 z-10 border border-[#FFFFFF] bg-background" />
-            {TIME_SLOTS.map((time, slotIndex) => (
-              <th
-                key={slotIndex}
-                className="h-7.5 w-7.5 min-w-7.5 border border-[#FFFFFF] p-0 text-[10px] font-normal"
-              >
-                {time}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {weekDates.map((date, dayIndex) => (
-            <tr key={date.toISOString()}>
-              <th className="sticky left-0 z-10 border border-[#FFFFFF] bg-background px-2 text-sm font-normal whitespace-nowrap">
-                {formatDate(date)}
-              </th>
-              {TIME_SLOTS.map((_, slotIndex) => {
-                const key = cellKey(dayIndex, slotIndex);
-                return (
-                  <td
-                    key={slotIndex}
-                    onClick={() => toggleCell(key)}
-                    className={cn(
-                      "h-7.5 w-7.5 min-w-7.5 cursor-pointer border border-[#FFFFFF] p-0",
-                      selected.has(key) ? "bg-primary" : "bg-muted",
-                    )}
-                  />
-                );
-              })}
+    <>
+      <div className="overflow-x-auto">
+        <table className="border-collapse">
+          <thead>
+            <tr>
+              <th className="sticky left-0 z-10 border border-[#FFFFFF] bg-background" />
+              {TIME_SLOTS.map((time, slotIndex) => (
+                <th
+                  key={slotIndex}
+                  className="h-7.5 w-7.5 min-w-7.5 border border-[#FFFFFF] p-0 text-[10px] font-normal"
+                >
+                  {time}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {weekDates.map((date, dayIndex) => (
+              <tr key={date.toISOString()}>
+                <th className="sticky left-0 z-10 border border-[#FFFFFF] bg-background px-2 text-sm font-normal whitespace-nowrap">
+                  {formatDate(date)}
+                </th>
+                {TIME_SLOTS.map((_, slotIndex) => {
+                  const key = cellKey(dayIndex, slotIndex);
+                  const taskId = selectedCell.get(key);
+                  return (
+                    <td
+                      key={slotIndex}
+                      onClick={() => toggleCell(key)}
+                      className={cn(
+                        "h-7.5 w-7.5 min-w-7.5 cursor-pointer border border-[#FFFFFF] p-0 text-center text-[10px]",
+                        taskId !== undefined
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted",
+                      )}
+                    >
+                      {taskId}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <TaskList tasks={tasks} onValueChange={(taskId) => setInputTaskData(taskId)} />
+      <div>
+        現在のタスク：{String(selectedTask?.id)}
+      </div>
+    </>
   );
 }

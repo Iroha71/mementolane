@@ -188,7 +188,7 @@ ipcMain.handle("getAllTasks", async () => {
 
     return {
       success: true,
-      cards: tasks,
+      tasks,
     };
   } catch (err) {
     return {
