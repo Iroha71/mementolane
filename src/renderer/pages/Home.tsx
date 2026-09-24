@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { CardSchema } from "../../shared/cardSchema";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 const STATUSES = [
   {
@@ -75,7 +76,7 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <Button onClick={registTask}>テスト</Button>
+      <Link to="/effort" >Effort</Link>
     </div>
   );
 }
