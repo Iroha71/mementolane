@@ -65,6 +65,7 @@ export default function StatusLane({
               title={card.title}
               startAt={card.startAt}
               dueAt={card.dueAt}
+              themeColor={card.themeColor}
               detail={card.detail}
               isDone={card.isDone}
               onTaskUpdated={onTaskUpdated}

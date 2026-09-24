@@ -44,6 +44,11 @@ interface TaskFormProps {
   onSubmit: SubmitHandler<CardRequestSchema>;
 }
 
+const THEME_COLORS: { label: string; value: string }[] = [
+  { label: "#FFFFFF", value: "#FFFFFF" },
+  { label: "#FF0000", value: "#FF0000" },
+];
+
 export default function TaskForm({
   mode = "create",
   className,
@@ -118,6 +123,32 @@ export default function TaskForm({
                 )}
               />
               <FieldError errors={fieldErrorsFor("status")} />
+            </Field>
+            <Field>
+              <FieldLabel>{message.card.themeColor}</FieldLabel>
+              <Controller
+                control={control}
+                name="themeColor"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="カラーを選択" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {THEME_COLORS.map((color) => (
+                        <SelectItem key={color.value} value={color.value}>
+                          <span
+                            className="size-4 rounded-sm border"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          {color.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              <FieldError errors={fieldErrorsFor("themeColor")} />
             </Field>
             <Field>
               <FieldLabel>
