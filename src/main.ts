@@ -4,6 +4,7 @@ import { success, z } from "zod";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
+  getAllTasks,
   getTaskById,
   insertTask,
   sendMessage,
@@ -180,3 +181,19 @@ ipcMain.handle("registEffort", async (_event, request) => {
     };
   }
 });
+
+ipcMain.handle("getAllTasks", async () => {
+  try {
+    const tasks = await getAllTasks();
+
+    return {
+      success: true,
+      cards: tasks,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: "DB処理時にエラーが発生しました。ページを再読み込みしてください。",
+    }
+  }
+})

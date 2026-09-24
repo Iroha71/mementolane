@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
+import { CardSchema } from "../../../shared/cardSchema";
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -33,6 +34,17 @@ const cellKey = (dayIndex: number, slotIndex: number) =>
 export default function EffortList() {
   const weekDates = useMemo(() => getThisWeekDates(), []);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [tasks, setTasks] = useState<CardSchema[]>([]);
+
+  useEffect(() => {
+    window.api.getAllTasks().then((result) => {
+      if (result.success) {
+        setTasks(result.tasks);
+      } else {
+        console.log(result.message);
+      }
+    })
+  }, [])
 
   const toggleCell = (key: string) => {
     setSelected((prev) => {

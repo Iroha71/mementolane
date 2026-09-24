@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("updateTask", id, request),
   registEffort: (request: EffortBlockRequest) =>
     ipcRenderer.invoke("registEffort", request),
+  getAllTasks: () => ipcRenderer.invoke("getAllTasks"),
 });

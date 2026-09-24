@@ -17,6 +17,7 @@ declare global {
         request: CardRequestSchema,
       ) => Promise<InsertTaskResult>;
       registEffort: (request: EffortBlockRequest) => Promise<EffortBlock>;
+      getAllTasks: () => Promise<| {success: true, tasks: CardSchema[]} | {success: false, message: string}>;
     };
   }
 }
