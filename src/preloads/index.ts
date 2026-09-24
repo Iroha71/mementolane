@@ -1,6 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { CardRequestSchema } from "../shared/cardSchema";
-import { EffortBlockRequest } from "../shared/effortBlockSchema";
+import {
+  EffortBlockRequest,
+  SaveWeekEffortsRequest,
+} from "../shared/effortBlockSchema";
 
 contextBridge.exposeInMainWorld("api", {
   sendMessage: (msg: string) => ipcRenderer.invoke("sendMessage", msg),
@@ -13,4 +16,8 @@ contextBridge.exposeInMainWorld("api", {
   registEffort: (request: EffortBlockRequest) =>
     ipcRenderer.invoke("registEffort", request),
   getAllTasks: () => ipcRenderer.invoke("getAllTasks"),
+  getWeekEfforts: (weekStart: Date) =>
+    ipcRenderer.invoke("getWeekEfforts", weekStart),
+  saveWeekEfforts: (request: SaveWeekEffortsRequest) =>
+    ipcRenderer.invoke("saveWeekEfforts", request),
 });

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { CardSchema } from "../../../shared/cardSchema";
 import TaskList from "@/components/TaskList";
+import { Button } from "@/components/ui/button";
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -50,6 +51,40 @@ export default function EffortList() {
       }
     });
   }, []);
+
+  // 保存は週単位の置き換えのため、既存の工数を読み込んでから編集させる
+  useEffect(() => {
+    window.api.getWeekEfforts(weekDates[0]).then((result) => {
+      if (!result.success) {
+        alert(result.message);
+        return;
+      }
+
+      const cells = new Map<string, number>();
+      result.data.forEach((block) => {
+        const dayIndex = weekDates.findIndex(
+          (date) => date.getTime() === block.date.getTime(),
+        );
+        if (dayIndex !== -1) {
+          cells.set(cellKey(dayIndex, block.blockNumber), block.cardId);
+        }
+      });
+      setSelectedCell(cells);
+    });
+  }, [weekDates]);
+
+  const saveEfforts = () => {
+    const blocks = [...selectedCell].map(([key, cardId]) => {
+      const [dayIndex, slotIndex] = key.split("-").map(Number);
+      return { date: weekDates[dayIndex], cardId, blockNumber: slotIndex };
+    });
+
+    window.api
+      .saveWeekEfforts({ weekStart: weekDates[0], blocks })
+      .then((result) => {
+        alert(result.success ? "工数を保存しました" : result.message);
+      });
+  };
 
   const setInputTaskData = (id: string) => {
     const parsedId = parseInt(id);
@@ -125,6 +160,9 @@ export default function EffortList() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="m-4 flex justify-end">
+        <Button onClick={saveEfforts}>保存</Button>
       </div>
       <TaskList tasks={tasks} onValueChange={(taskId) => setInputTaskData(taskId)} />
       <div>

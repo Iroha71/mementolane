@@ -15,9 +15,16 @@ import {
   CardSchema,
   InsertTaskResult,
 } from "./shared/cardSchema";
-import { registEffort } from "./main/repositories/effortBlockRepository";
+import {
+  getWeekEfforts,
+  registEffort,
+  saveWeekEfforts,
+} from "./main/repositories/effortBlockRepository";
 import {
   effortBlockRequest,
+  saveWeekEffortsRequest,
+  WEEK_MS,
+  type EffortBlocksResult,
   type EffortBlock,
   type EffortBlockRequest,
 } from "./shared/effortBlockSchema";
@@ -196,4 +203,51 @@ ipcMain.handle("getAllTasks", async () => {
       message: "DB処理時にエラーが発生しました。ページを再読み込みしてください。",
     }
   }
-})
+});
+
+ipcMain.handle(
+  "getWeekEfforts",
+  (_event, weekStart: unknown): EffortBlocksResult => {
+    const parsed = z.date().safeParse(weekStart);
+    if (!parsed.success) {
+      return { success: false, message: "不正な日付です。" };
+    }
+
+    try {
+      const weekEnd = new Date(parsed.data.getTime() + WEEK_MS);
+
+      return { success: true, data: getWeekEfforts(parsed.data, weekEnd) };
+    } catch (err) {
+      console.error(err);
+
+      return {
+        success: false,
+        message: "工数の取得に失敗しました。ページを再読み込みしてください。",
+      };
+    }
+  },
+);
+
+ipcMain.handle(
+  "saveWeekEfforts",
+  (_event, request: unknown): EffortBlocksResult => {
+    const parsed = saveWeekEffortsRequest.safeParse(request);
+    if (!parsed.success) {
+      return { success: false, message: parsed.error.issues[0].message };
+    }
+
+    try {
+      const { weekStart, blocks } = parsed.data;
+      const weekEnd = new Date(weekStart.getTime() + WEEK_MS);
+
+      return { success: true, data: saveWeekEfforts(weekStart, weekEnd, blocks) };
+    } catch (err) {
+      console.error(err);
+
+      return {
+        success: false,
+        message: "工数の保存に失敗しました。もう一度やり直してください。",
+      };
+    }
+  },
+);
