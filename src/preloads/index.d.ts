@@ -3,6 +3,12 @@ import {
   CardSchema,
   InsertTaskResult,
 } from "../shared/cardSchema";
+import {
+  EffortBlock,
+  EffortBlockRequest,
+  EffortBlocksResult,
+  SaveWeekEffortsRequest,
+} from "../shared/effortBlockSchema";
 
 declare global {
   interface Window {
@@ -15,6 +21,12 @@ declare global {
         id: number,
         request: CardRequestSchema,
       ) => Promise<InsertTaskResult>;
+      registEffort: (request: EffortBlockRequest) => Promise<EffortBlock>;
+      getAllTasks: () => Promise<| {success: true, tasks: CardSchema[]} | {success: false, message: string}>;
+      getWeekEfforts: (weekStart: Date) => Promise<EffortBlocksResult>;
+      saveWeekEfforts: (
+        request: SaveWeekEffortsRequest,
+      ) => Promise<EffortBlocksResult>;
     };
   }
 }

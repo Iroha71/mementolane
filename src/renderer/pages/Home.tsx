@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CardSchema } from "../../shared/cardSchema";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 const STATUSES = [
   {
@@ -51,6 +53,14 @@ export default function Home() {
     fetchCards();
   }, []);
 
+  const registTask = () => {
+    window.api
+      .registEffort({ date: new Date(), cardId: 1, blockNumber: 1 })
+      .then((block) => {
+        console.log(block);
+      });
+  };
+
   return (
     <div className="flex w-full flex-col p-4">
       <div className="flex w-full items-start gap-2 overflow-x-auto">
@@ -66,6 +76,7 @@ export default function Home() {
           </div>
         ))}
       </div>
+      <Link to="/effort" >Effort</Link>
     </div>
   );
 }

@@ -4,6 +4,17 @@ import { getDb } from "../db/client";
 import { card } from "../db/schema";
 import { CardRequestSchema, CardSchema } from "../../shared/cardSchema";
 
+export async function getAllTasks(): Promise<CardSchema[]> {
+  try {
+    const db = getDb();
+
+    return await db.select().from(card);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
 export async function getActiveTasks(): Promise<CardSchema[]> {
   try {
     const db = getDb();

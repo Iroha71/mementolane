@@ -1,14 +1,10 @@
-import {
-  BrowserWindow,
-  app,
-  ipcMain,
-  IpcMainInvokeEvent,
-} from "electron";
+import { BrowserWindow, app, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "node:path";
-import { z } from "zod";
+import { success, z } from "zod";
 import { getDb } from "./main/db/client";
 import {
   getActiveTasks,
+  getAllTasks,
   getTaskById,
   insertTask,
   sendMessage,
@@ -19,6 +15,20 @@ import {
   CardSchema,
   InsertTaskResult,
 } from "./shared/cardSchema";
+import {
+  getWeekEfforts,
+  registEffort,
+  saveWeekEfforts,
+} from "./main/repositories/effortBlockRepository";
+import {
+  effortBlockRequest,
+  saveWeekEffortsRequest,
+  WEEK_MS,
+  type EffortBlocksResult,
+  type EffortBlock,
+  type EffortBlockRequest,
+} from "./shared/effortBlockSchema";
+import { message } from "./shared/message";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
@@ -153,3 +163,91 @@ export const handleUpdateTask = async (
 };
 
 ipcMain.handle("updateTask", handleUpdateTask);
+ipcMain.handle("registEffort", async (_event, request) => {
+  console.log(`main.ts request ${request}`);
+  const parsed = effortBlockRequest.safeParse(request);
+  if (!parsed.success) {
+    const { fieldErrors } = z.flattenError(parsed.error);
+
+    return { success: false, fieldErrors, status: 422 };
+  }
+
+  try {
+    const data = await registEffort(
+      parsed.data.date,
+      parsed.data.cardId,
+      parsed.data.blockNumber,
+    );
+    console.log(`main.ts: ${data}`);
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        "データ登録時にエラーが発生しました。もう一度やり直してください。",
+      status: 500,
+    };
+  }
+});
+
+ipcMain.handle("getAllTasks", async () => {
+  try {
+    const tasks = await getAllTasks();
+
+    return {
+      success: true,
+      tasks,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: "DB処理時にエラーが発生しました。ページを再読み込みしてください。",
+    }
+  }
+});
+
+ipcMain.handle(
+  "getWeekEfforts",
+  (_event, weekStart: unknown): EffortBlocksResult => {
+    const parsed = z.date().safeParse(weekStart);
+    if (!parsed.success) {
+      return { success: false, message: "不正な日付です。" };
+    }
+
+    try {
+      const weekEnd = new Date(parsed.data.getTime() + WEEK_MS);
+
+      return { success: true, data: getWeekEfforts(parsed.data, weekEnd) };
+    } catch (err) {
+      console.error(err);
+
+      return {
+        success: false,
+        message: "工数の取得に失敗しました。ページを再読み込みしてください。",
+      };
+    }
+  },
+);
+
+ipcMain.handle(
+  "saveWeekEfforts",
+  (_event, request: unknown): EffortBlocksResult => {
+    const parsed = saveWeekEffortsRequest.safeParse(request);
+    if (!parsed.success) {
+      return { success: false, message: parsed.error.issues[0].message };
+    }
+
+    try {
+      const { weekStart, blocks } = parsed.data;
+      const weekEnd = new Date(weekStart.getTime() + WEEK_MS);
+
+      return { success: true, data: saveWeekEfforts(weekStart, weekEnd, blocks) };
+    } catch (err) {
+      console.error(err);
+
+      return {
+        success: false,
+        message: "工数の保存に失敗しました。もう一度やり直してください。",
+      };
+    }
+  },
+);
