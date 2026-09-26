@@ -41,6 +41,11 @@ export default function EffortList() {
   );
   const [tasks, setTasks] = useState<CardSchema[]>([]);
   const [selectedTask, setSelectedTask] = useState<CardSchema | null>(null)
+  // セル描画時にタスクidからthemeColorを引くための索引
+  const taskById = useMemo(
+    () => new Map(tasks.map((task) => [task.id, task])),
+    [tasks],
+  );
 
   useEffect(() => {
     window.api.getAllTasks().then((result) => {
@@ -141,16 +146,19 @@ export default function EffortList() {
                 {TIME_SLOTS.map((_, slotIndex) => {
                   const key = cellKey(dayIndex, slotIndex);
                   const taskId = selectedCell.get(key);
+                  const themeColor =
+                    taskId !== undefined
+                      ? taskById.get(taskId)?.themeColor
+                      : undefined;
                   return (
                     <td
                       key={slotIndex}
                       onClick={() => toggleCell(key)}
                       className={cn(
                         "h-7.5 w-7.5 min-w-7.5 cursor-pointer border border-[#FFFFFF] p-0 text-center text-[10px]",
-                        taskId !== undefined
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted",
+                        taskId === undefined && "bg-muted",
                       )}
+                      style={{ backgroundColor: themeColor }}
                     >
                       {taskId}
                     </td>

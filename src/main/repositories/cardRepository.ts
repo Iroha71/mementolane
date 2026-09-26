@@ -66,6 +66,7 @@ export async function insertTask(
         status: request.status,
         startAt: request.startAt,
         dueAt: request.dueAt,
+        themeColor: request.themeColor,
         detail: request.detail,
         isDone: request.isDone,
       })
@@ -101,6 +102,7 @@ export async function updateTask(
         title: request.title,
         status: request.status,
         startAt: request.startAt,
+        themeColor: request.themeColor,
         dueAt: request.dueAt,
         detail: request.detail,
         isDone: request.isDone,

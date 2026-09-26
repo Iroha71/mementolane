@@ -75,6 +75,7 @@ export default function TaskUpdate({ id }: TaskUpdateProps) {
         dueAt={task.dueAt ?? undefined}
         detail={task.detail ?? undefined}
         isDone={task.isDone}
+        themeColor={task.themeColor}
         status={task.status}
         error={saveError}
         fieldErrors={fieldErrors}
