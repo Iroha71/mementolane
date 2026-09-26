@@ -19,7 +19,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release": "node scripts/release.mjs"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.0",
