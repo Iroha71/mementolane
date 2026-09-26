@@ -38,6 +38,7 @@ interface TaskFormProps {
   dueAt?: string;
   detail?: string;
   isDone?: boolean;
+  themeColor?: string;
   status: string;
   error?: string;
   fieldErrors?: CardRequestFieldErrors;
@@ -57,6 +58,7 @@ export default function TaskForm({
   dueAt,
   detail,
   isDone,
+  themeColor,
   status,
   error,
   fieldErrors,
@@ -80,6 +82,7 @@ export default function TaskForm({
       detail: detail ? detail : "",
       status: status,
       isDone: isDone ?? false,
+      themeColor: themeColor ?? "#FFFFFF",
     },
   });
 

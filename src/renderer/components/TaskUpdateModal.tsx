@@ -75,6 +75,7 @@ export default function TaskUpdateModal({
           status={task.status}
           detail={task.detail ?? undefined}
           isDone={task.isDone}
+          themeColor={task.themeColor}
           error={saveError}
           fieldErrors={fieldErrors}
           onSubmit={onSubmit}
