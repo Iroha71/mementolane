@@ -188,6 +188,7 @@ describe("updateTask", () => {
       startAt: "2026-01-01",
       dueAt: "2026-01-31",
       detail: "更新後の詳細",
+      themeColor: "#FF0000",
       isDone: true,
     };
 
@@ -200,6 +201,7 @@ describe("updateTask", () => {
     expect(result?.startAt).toBe(updateRequest.startAt);
     expect(result?.dueAt).toBe(updateRequest.dueAt);
     expect(result?.detail).toBe(updateRequest.detail);
+    expect(result?.themeColor).toBe(updateRequest.themeColor);
     expect(result?.isDone).toBe(true);
   });
 
