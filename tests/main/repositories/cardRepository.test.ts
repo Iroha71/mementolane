@@ -36,6 +36,7 @@ const baseRequest: CardRequestSchema = {
   status: "plan",
   startAt: null,
   dueAt: null,
+  themeColor: "#FFFFFF",
   detail: null,
   isDone: false,
 };

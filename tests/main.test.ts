@@ -38,6 +38,7 @@ const validRequest: CardRequestSchema = {
   status: "plan",
   startAt: null,
   dueAt: null,
+  themeColor: "#FFFFFF",
   detail: null,
   isDone: false,
 };
@@ -48,6 +49,7 @@ const fakeCard: CardSchema = {
   status: "plan",
   startAt: null,
   dueAt: null,
+  themeColor: "#FFFFFF",
   detail: null,
   isDone: false,
   createdAt: new Date(),
